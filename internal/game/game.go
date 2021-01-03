@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/brombaut/ascii-chess/internal/pieces"
 )
 
@@ -12,26 +14,51 @@ const (
 )
 
 type Game struct {
-	Board *Board
-	Moves []pieces.Move
-	White Player
-	Black Player
-	Turn  PlayerColor
-	State GameState
+	Board         *Board
+	Moves         []pieces.Move
+	White         Player
+	Black         Player
+	Turn          PlayerColor
+	State         GameState
+	SelectedPiece *pieces.PlayingPiece
 }
 
-func (g Game) HandlePositionInput(input pieces.Position) {
+func (g Game) HandlePositionInput(input pieces.Position) error {
 	// For now, assume that input is a valid position like 'e3'
-
+	if g.State == SELECT_PIECE {
+		return g.selectPiece(input)
+	} else {
+		return g.selectMove(input)
+	}
 }
 
-func (g Game) selectPiece(pos pieces.Position) {
-
+func (g Game) selectPiece(pos pieces.Position) error {
+	pap, err := g.Board.PieceAtPosition(pos)
+	if err != nil {
+		return err
+	}
+	if (*pap).Literal() == pieces.NO_PIECE {
+		return fmt.Errorf("Can't select no piece")
+	}
+	err = g.setSelectedPiece(pap)
+	if err != nil {
+		return err
+	}
 	g.State = SELECT_MOVE
+	return nil
 }
 
-func (g Game) selectMove() {
+func (g Game) setSelectedPiece(piece *pieces.PlayingPiece) error {
+	(*g.SelectedPiece).SetIsSelected(false)
+	g.SelectedPiece = piece
+	(*g.SelectedPiece).SetIsSelected(true)
+	return nil
+}
+
+func (g Game) selectMove(pos pieces.Position) error {
 	g.State = SELECT_PIECE
+	g.nextTurn()
+	return nil
 }
 
 func (g Game) nextTurn() {

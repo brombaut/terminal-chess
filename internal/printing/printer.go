@@ -31,12 +31,15 @@ func Print(g *game.Game) {
 func printBoard(b *game.Board) {
 	lightSquare := color.New(color.FgBlack, color.BgWhite)
 	darkSquare := color.New(color.FgBlack, color.BgCyan)
+	selectedSquare := color.New(color.FgBlack, color.BgRed)
 	rowStr := "(%d) "
 	squareStr := " %s  "
 	for i, row := range b.Pieces {
 		fmt.Printf(rowStr, 8-i)
 		for j, piece := range row {
-			if (i+j)%2 == 0 {
+			if piece.IsSelected() {
+				selectedSquare.Printf(squareStr, getBoardCode(piece))
+			} else if (i+j)%2 == 0 {
 				lightSquare.Printf(squareStr, getBoardCode(piece))
 			} else {
 				darkSquare.Printf(squareStr, getBoardCode(piece))

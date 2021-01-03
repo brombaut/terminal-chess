@@ -9,6 +9,13 @@ type Position struct {
 	boardCol rune
 }
 
+func (p Position) Row() int {
+	return p.row
+}
+func (p Position) Col() int {
+	return p.col
+}
+
 func NewIdxPosition(row int, col int) (*Position, error) {
 	var p Position
 	p.row = row
