@@ -113,3 +113,45 @@ func TestValidPositions(t *testing.T) {
 		}
 	}
 }
+
+func TestInvalidPositionsFromIdx(t *testing.T) {
+	squares := []struct {
+		rowId    int
+		colId    int
+		boardRow rune
+		boardCol rune
+	}{
+		{-1, 0, '8', 'a'},
+		{8, 0, '8', 'a'},
+		{0, -1, '8', 'a'},
+		{0, 8, '8', 'a'},
+	}
+	for _, square := range squares {
+		var err error
+		_, err = NewIdxPosition(square.rowId, square.colId)
+		if err == nil {
+			t.Errorf("Was expecting error when building position from ids, but got none: rowId=%d, colId=%d", square.rowId, square.colId)
+		}
+	}
+}
+
+func TestInvalidPositionsFromBoard(t *testing.T) {
+	squares := []struct {
+		rowId    int
+		colId    int
+		boardRow rune
+		boardCol rune
+	}{
+		{0, 0, '9', 'a'},
+		{0, 0, '0', 'a'},
+		{0, 0, '8', '0'},
+		{0, 0, '8', 'i'},
+	}
+	for _, square := range squares {
+		var err error
+		_, err = NewBoardPosition(square.boardRow, square.boardCol)
+		if err == nil {
+			t.Errorf("Was expecting error when building position from board, but got none: boardRow=%d, boardCol=%d", square.boardRow, square.boardCol)
+		}
+	}
+}
