@@ -53,7 +53,7 @@ func printBoard(b *game.Board) {
 	fmt.Println()
 }
 
-func getBoardCode(piece pieces.Piece) string {
+func getBoardCode(piece pieces.PlayingPiece) string {
 	switch piece.Literal() {
 	case pieces.KING:
 		if piece.Color() == pieces.WHITE {
