@@ -16,7 +16,7 @@ func NewBoard() *Board {
 	return &b
 }
 
-func (b Board) PieceAtPosition(p pieces.Position) (*pieces.PlayingPiece, error) {
+func (b Board) PieceAtPosition(p *pieces.Position) (*pieces.PlayingPiece, error) {
 	if p.Row() < 0 || p.Row() > 7 || p.Col() < 0 || p.Col() > 7 {
 		return nil, fmt.Errorf("Position index out of bounds")
 	}

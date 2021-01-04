@@ -33,7 +33,10 @@ func main() {
 			fmt.Println(err.Error())
 		}
 
-		game.HandlePositionInput(*posInput)
+		err = game.HandlePositionInput(posInput)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 
 		fmt.Println()
 		printing.Print(game)

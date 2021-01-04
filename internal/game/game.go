@@ -23,16 +23,18 @@ type Game struct {
 	SelectedPiece *pieces.PlayingPiece
 }
 
-func (g Game) HandlePositionInput(input pieces.Position) error {
+func (g Game) HandlePositionInput(input *pieces.Position) error {
 	// For now, assume that input is a valid position like 'e3'
+	var err error
 	if g.State == SELECT_PIECE {
-		return g.selectPiece(input)
+		err = g.selectPiece(input)
 	} else {
-		return g.selectMove(input)
+		err = g.selectMove(input)
 	}
+	return err
 }
 
-func (g Game) selectPiece(pos pieces.Position) error {
+func (g Game) selectPiece(pos *pieces.Position) error {
 	pap, err := g.Board.PieceAtPosition(pos)
 	if err != nil {
 		return err
@@ -44,18 +46,21 @@ func (g Game) selectPiece(pos pieces.Position) error {
 	if err != nil {
 		return err
 	}
+
 	g.State = SELECT_MOVE
 	return nil
 }
 
 func (g Game) setSelectedPiece(piece *pieces.PlayingPiece) error {
-	(*g.SelectedPiece).SetIsSelected(false)
+	if g.SelectedPiece != nil {
+		(*g.SelectedPiece).SetIsSelected(false)
+	}
 	g.SelectedPiece = piece
 	(*g.SelectedPiece).SetIsSelected(true)
 	return nil
 }
 
-func (g Game) selectMove(pos pieces.Position) error {
+func (g Game) selectMove(pos *pieces.Position) error {
 	g.State = SELECT_PIECE
 	g.nextTurn()
 	return nil

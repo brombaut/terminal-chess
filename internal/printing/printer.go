@@ -31,7 +31,7 @@ func Print(g *game.Game) {
 func printBoard(b *game.Board) {
 	lightSquare := color.New(color.FgBlack, color.BgWhite)
 	darkSquare := color.New(color.FgBlack, color.BgCyan)
-	selectedSquare := color.New(color.FgBlack, color.BgRed)
+	selectedSquare := color.New(color.FgBlack, color.BgLightRed)
 	rowStr := "(%d) "
 	squareStr := " %s  "
 	for i, row := range b.Pieces {
